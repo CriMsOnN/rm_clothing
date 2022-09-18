@@ -28,7 +28,7 @@ const SaveDialog: React.FC<Props> = ({ isOpen, setSaveDialog }) => {
     if (outfitName === '') {
       return setError('Please enter a name');
     }
-    fetchNui('sveOutfit', { outfitName });
+    fetchNui('saveOutfit', { outfitName });
     setSaveDialog(false);
     visibility.setVisible(false);
   };
@@ -59,6 +59,7 @@ const SaveDialog: React.FC<Props> = ({ isOpen, setSaveDialog }) => {
               variant="flushed"
               placeholder="Outfit Name"
               color="white"
+              value={outfitName}
               onChange={(e) => setOutfitName(e.target.value)}
             />
             <Flex justifyContent="center" alignItems="center" marginTop="20px">

@@ -94,6 +94,7 @@ RegisterNUICallback("changeValue", function(data, cb)
 end)
 
 RegisterNUICallback("saveOutfit", function(data, cb)
+    cb(true)
     inClothingMenu = false
     SendNUIMessage({
         action = "hide",
