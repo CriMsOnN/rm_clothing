@@ -3,6 +3,7 @@ local playerData = {}
 local inClothingMenu = false
 local isPedChanging = false
 local activeCamera = nil
+local utils = require 'preload/{getClothes,getSkins,getFeatures,renderPed,getAppearance}'
 function openClothingMenu(tabs, data, camera)
     activeCamera = camera
     playerData = data
@@ -12,7 +13,7 @@ function openClothingMenu(tabs, data, camera)
     local clothes, skins = nil, nil
     local activeTabs = {}
     if tabs.clothes then
-        clothes = RMCore.Functions.getClothes(sex)
+        clothes = utils:getClothes(sex)
         for k, v in pairs(clothes) do
             playerClothes[#playerClothes + 1] = {
                 name = k,
@@ -26,7 +27,7 @@ function openClothingMenu(tabs, data, camera)
     end
 
     if tabs.skins then
-        skins = RMCore.Functions.getSkins(sex)
+        skins = utils:getSkins(sex)
         for k, v in pairs(skins) do
             playerSkins[#playerSkins + 1] = {
                 name = k,
@@ -42,8 +43,8 @@ function openClothingMenu(tabs, data, camera)
             maxValue = 6,
             currentValue = 0
         }
-
-        for k, v in pairs(RMCore.Functions.getFeatures()) do
+        local features = utils:getFeatures()
+        for k, v in pairs(features) do
             playerSkins[#playerSkins + 1] = {
                 name = ('features_%s'):format(k),
                 minValue = -100,
@@ -89,7 +90,7 @@ RegisterNUICallback("changeValue", function(data, cb)
     end
 
     isPedChanging = true
-    RMCore.Functions.renderPed(PlayerPedId(), data)
+    utils:renderPed(PlayerPedId(), data)
     isPedChanging = false
 end)
 
@@ -100,13 +101,14 @@ RegisterNUICallback("saveOutfit", function(data, cb)
         action = "hide",
         data = false
     })
+    SetNuiFocus(false, false)
 
     playerData.outfitName = data.outfitName
-    playerData.skin = RMCore.Functions.getAppearance('skin')
-    playerData.outfit = RMCore.Functions.getAppearance('outfit')
-    DoScreenFadeIn(0)
+    playerData.skin = utils:getAppearance('skin')
+    playerData.outfit = utils:getAppearance('outfit')
     if playerData.firstname then
         TriggerServerEvent("rm:newCharacter", playerData)
+        DoScreenFadeOut(0)
     else
         TriggerServerEvent("rm:newOutfit", playerData)
     end

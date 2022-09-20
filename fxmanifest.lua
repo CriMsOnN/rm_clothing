@@ -16,6 +16,7 @@ dependencies {
 }
 
 shared_scripts {
+    '@rm_lib/require.lua',
     'shared/*.lua',
 }
 
