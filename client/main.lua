@@ -3,7 +3,7 @@ local playerData = {}
 local inClothingMenu = false
 local isPedChanging = false
 local activeCamera = nil
-local utils = require 'preload/{getClothes,getSkins,getFeatures,renderPed,getAppearance}'
+
 function openClothingMenu(tabs, data, camera)
     activeCamera = camera
     playerData = data
@@ -13,7 +13,7 @@ function openClothingMenu(tabs, data, camera)
     local clothes, skins = nil, nil
     local activeTabs = {}
     if tabs.clothes then
-        clothes = utils:getClothes(sex)
+        clothes = lib.getClothes(sex)
         for k, v in pairs(clothes) do
             playerClothes[#playerClothes + 1] = {
                 name = k,
@@ -27,7 +27,7 @@ function openClothingMenu(tabs, data, camera)
     end
 
     if tabs.skins then
-        skins = utils:getSkins(sex)
+        skins = lib.getSkins(sex)
         for k, v in pairs(skins) do
             playerSkins[#playerSkins + 1] = {
                 name = k,
@@ -43,7 +43,7 @@ function openClothingMenu(tabs, data, camera)
             maxValue = 6,
             currentValue = 0
         }
-        local features = utils:getFeatures()
+        local features = lib.getFeatures()
         for k, v in pairs(features) do
             playerSkins[#playerSkins + 1] = {
                 name = ('features_%s'):format(k),
@@ -90,7 +90,7 @@ RegisterNUICallback("changeValue", function(data, cb)
     end
 
     isPedChanging = true
-    utils:renderPed(PlayerPedId(), data)
+    lib.renderPed(PlayerPedId(), data)
     isPedChanging = false
 end)
 
@@ -104,8 +104,8 @@ RegisterNUICallback("saveOutfit", function(data, cb)
     SetNuiFocus(false, false)
 
     playerData.outfitName = data.outfitName
-    playerData.skin = utils:getAppearance('skin')
-    playerData.outfit = utils:getAppearance('outfit')
+    playerData.skin = lib.getAppearance('skin')
+    playerData.outfit = lib.getAppearance('outfit')
     if playerData.firstname then
         TriggerServerEvent("rm:newCharacter", playerData)
         DoScreenFadeOut(0)
@@ -119,28 +119,28 @@ RegisterNUICallback('gotoCamera', function(data, cb)
     local to = data.camera
     if to == "head" then
         local pCoordsOffset = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 0.75, 0.65)
-        local headCamera = RMCore.Functions.createCam(pCoordsOffset,
+        local headCamera = lib.createCam(pCoordsOffset,
             vector3(0.0, 0.0, GetEntityHeading(PlayerPedId()) + 180))
         SetCamActiveWithInterp(headCamera, activeCamera, 1000, 10.0, 10.0)
         activeCamera = headCamera
         Wait(1000)
     elseif to == "chest" then
         local pCoordsOffset = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 1.0, 0.0)
-        local chestCamera = RMCore.Functions.createCam(pCoordsOffset,
+        local chestCamera = lib.createCam(pCoordsOffset,
             vector3(0.0, 0.0, GetEntityHeading(PlayerPedId()) + 180))
         SetCamActiveWithInterp(chestCamera, activeCamera, 1000, 10.0, 10.0)
         activeCamera = chestCamera
         Wait(1000)
     elseif to == "boots" then
         local pCoordsOffset = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 2.0, 0.0)
-        local bootsCamera = RMCore.Functions.createCam(pCoordsOffset,
+        local bootsCamera = lib.createCam(pCoordsOffset,
             vector3(0.0, 0.0, GetEntityHeading(PlayerPedId()) + 180))
         SetCamActiveWithInterp(bootsCamera, activeCamera, 1000, 10.0, 10.0)
         activeCamera = bootsCamera
         Wait(1000)
     elseif to == "default" then
         local pCoordsOffset = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 2.0, 0)
-        local defaultCamera = RMCore.Functions.createCam(pCoordsOffset, vector3(0.0, 0.0, 0.0))
+        local defaultCamera = lib.createCam(pCoordsOffset, vector3(0.0, 0.0, 0.0))
         SetCamActiveWithInterp(defaultCamera, activeCamera, 1000, 10.0, 10.0)
         activeCamera = defaultCamera
         Wait(1000)

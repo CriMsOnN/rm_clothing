@@ -16,7 +16,8 @@ dependencies {
 }
 
 shared_scripts {
-    '@rm_lib/require.lua',
+    '@rm_core/import.lua',
+    '@ox_lib/init.lua',
     'shared/*.lua',
 }
 
